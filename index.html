@@ -10,47 +10,46 @@
 <body>
 <div class="loading">Loading Flying V…</div>
 <script>
-fetch('./site.html?v=20260718-booking-fix',{cache:'no-store'})
+fetch('./site.html?v=20260718-hero-fix',{cache:'no-store'})
 .then(r=>{if(!r.ok)throw new Error('Site load failed');return r.text()})
 .then(html=>{
-const fix=`<style id="family-photo-fix">
+const fixes=`<style id="live-site-fixes">
 #about .photo{display:flex!important;flex-direction:column!important;overflow:hidden!important}
 #about .photo img{width:100%!important;height:390px!important;aspect-ratio:auto!important;display:block!important;background:#f2f6f8!important;padding:0!important}
 #about .photo.kevin img,#about .photo.eric img{object-fit:contain!important;object-position:center!important}
 #about .photo.ella img{object-fit:cover!important;object-position:center 20%!important}
 #about .photo-label{padding:14px 10px!important}
-@media(max-width:650px){#about .photo-collage{grid-template-columns:1fr!important;gap:20px!important;max-width:330px!important;margin-inline:auto!important}#about .photo img{height:410px!important}}
+.hero-visual{position:relative!important;background:radial-gradient(circle at 50% 28%,rgba(52,169,232,.25),transparent 34%),linear-gradient(145deg,#113d69 0%,#071d36 58%,#0b2748 100%)!important}
+.hero-visual:before{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(105deg,transparent 46%,rgba(255,255,255,.05) 47%,rgba(255,255,255,.05) 49%,transparent 50%),linear-gradient(15deg,transparent 63%,rgba(60,174,232,.11) 64%,transparent 66%);pointer-events:none}
+.hero-visual>img{position:relative!important;z-index:1!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center 38%!important;padding:48px 86px 160px!important;background:transparent!important;filter:drop-shadow(0 18px 26px rgba(0,0,0,.35))!important}
+.hero-badge{z-index:3!important}.hero-badge>img{display:none!important}.hero-badge>div{width:100%!important}
+@media(max-width:650px){#about .photo-collage{grid-template-columns:1fr!important;gap:20px!important;max-width:330px!important;margin-inline:auto!important}#about .photo img{height:410px!important}.hero-visual>img{padding:44px 54px 170px!important;object-position:center 35%!important}.hero-badge{padding:18px!important}.hero-badge strong{font-size:1.05rem!important}}
 </style>`;
 const bookingFix=`<script id="booking-text-fix">
 (()=>{
-  const original=document.getElementById('bookingForm');
-  if(!original)return;
-  const form=original.cloneNode(true);
-  original.replaceWith(form);
-  form.addEventListener('submit',event=>{
-    event.preventDefault();
-    const data=new FormData(form);
-    const value=name=>String(data.get(name)||'').trim();
-    const lines=['Hi Kevin, I would like to book with Flying V.'];
-    const name=value('name');
-    const phone=value('phone');
-    const service=value('service');
-    const pairs=value('pairs');
-    const date=value('date');
-    const method=value('method');
-    const notes=value('notes');
-    if(name)lines.push('Name: '+name);
-    if(phone)lines.push('Phone: '+phone);
-    if(service)lines.push('Service: '+service);
-    if(pairs)lines.push('Pairs: '+pairs);
-    if(date)lines.push('Date: '+date);
-    if(method)lines.push('Option: '+method);
-    if(notes)lines.push('Notes: '+notes);
-    window.location.href='sms:+19053755663?body='+encodeURIComponent(lines.join('\\n'));
-  });
+ const original=document.getElementById('bookingForm');
+ if(!original)return;
+ const form=original.cloneNode(true);
+ original.replaceWith(form);
+ form.addEventListener('submit',event=>{
+  event.preventDefault();
+  const data=new FormData(form);
+  const value=name=>String(data.get(name)||'').trim();
+  const lines=['Hi Kevin, I would like to book with Flying V.'];
+  const name=value('name'),phone=value('phone'),service=value('service'),pairs=value('pairs'),date=value('date'),method=value('method'),notes=value('notes');
+  if(name)lines.push('Name: '+name);
+  if(phone)lines.push('Phone: '+phone);
+  if(service)lines.push('Service: '+service);
+  if(pairs)lines.push('Pairs: '+pairs);
+  if(date)lines.push('Date: '+date);
+  if(method)lines.push('Option: '+method);
+  if(notes)lines.push('Notes: '+notes);
+  window.location.href='sms:+19053755663?body='+encodeURIComponent(lines.join('\\n'));
+ });
 })();
 <\/script>`;
-html=html.replace('</head>',fix+'</head>').replace('</body>',bookingFix+'</body>');
+html=html.replace('https://www.theflyingv.ca/wp-content/uploads/2023/10/IMG_9457-scaled.jpeg','https://www.theflyingv.ca/wp-content/uploads/2026/07/cropped-Team-Flying-V-Logo.png');
+html=html.replace('</head>',fixes+'</head>').replace('</body>',bookingFix+'</body>');
 document.open();document.write(html);document.close();
 history.replaceState(null,'','./');
 })
