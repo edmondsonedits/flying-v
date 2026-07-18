@@ -10,7 +10,7 @@
 <body>
 <div class="loading">Loading Flying V…</div>
 <script>
-fetch('./site.html?v=20260718-family-fix',{cache:'no-store'})
+fetch('./site.html?v=20260718-booking-fix',{cache:'no-store'})
 .then(r=>{if(!r.ok)throw new Error('Site load failed');return r.text()})
 .then(html=>{
 const fix=`<style id="family-photo-fix">
@@ -21,7 +21,36 @@ const fix=`<style id="family-photo-fix">
 #about .photo-label{padding:14px 10px!important}
 @media(max-width:650px){#about .photo-collage{grid-template-columns:1fr!important;gap:20px!important;max-width:330px!important;margin-inline:auto!important}#about .photo img{height:410px!important}}
 </style>`;
-html=html.replace('</head>',fix+'</head>');
+const bookingFix=`<script id="booking-text-fix">
+(()=>{
+  const original=document.getElementById('bookingForm');
+  if(!original)return;
+  const form=original.cloneNode(true);
+  original.replaceWith(form);
+  form.addEventListener('submit',event=>{
+    event.preventDefault();
+    const data=new FormData(form);
+    const value=name=>String(data.get(name)||'').trim();
+    const lines=['Hi Kevin, I would like to book with Flying V.'];
+    const name=value('name');
+    const phone=value('phone');
+    const service=value('service');
+    const pairs=value('pairs');
+    const date=value('date');
+    const method=value('method');
+    const notes=value('notes');
+    if(name)lines.push('Name: '+name);
+    if(phone)lines.push('Phone: '+phone);
+    if(service)lines.push('Service: '+service);
+    if(pairs)lines.push('Pairs: '+pairs);
+    if(date)lines.push('Date: '+date);
+    if(method)lines.push('Option: '+method);
+    if(notes)lines.push('Notes: '+notes);
+    window.location.href='sms:+19053755663?body='+encodeURIComponent(lines.join('\\n'));
+  });
+})();
+<\/script>`;
+html=html.replace('</head>',fix+'</head>').replace('</body>',bookingFix+'</body>');
 document.open();document.write(html);document.close();
 history.replaceState(null,'','./');
 })
